@@ -36,7 +36,6 @@ public class PersonDAOTest {
     mockery.checking(new Expectations() {
       {
         oneOf(personRepository).addPerson(new Person(5, "Ivancho", "Ivanov", "Stoqnov"));
-        will(returnValue("Person added successfully !!!"));
 
         oneOf(personRepository).getPerson(5);
         will(returnValue("Person [id=5, first_name=Ivancho, middle_name=Ivanov, last_name=Stoqnov"));
@@ -49,9 +48,9 @@ public class PersonDAOTest {
     mockery.checking(new Expectations() {
       {
         oneOf(personRepository).deletePerson(3);
-        will(returnValue("Person deleted from database !!!"));
       }
     });
+
   }
 
   @Test
@@ -75,14 +74,12 @@ public class PersonDAOTest {
 
   @Test
   public void updatePersonToDatabase() throws SQLException {
-
-    personDAO.updatePerson(new Person(1, "Stanimir", "Stanimir", "Stoichev"));
     mockery.checking(new Expectations() {
       {
         oneOf(personRepository).updatePerson(new Person(1, "Stanimir", "Stoichev", "Stoichev"));
         will(returnValue("Person Successfully updated !!!"));
       }
     });
-//    assertEquals(personDAO.updatePerson(new Person(1, "Stanimir", "Stanimir", "Stoichev")), "Person Successfully updated !!!");
+    personDAO.updatePerson(new Person(1, "Stanimir", "Stanimir", "Stoichev"));
   }
 }
