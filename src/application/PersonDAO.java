@@ -78,6 +78,7 @@ public class PersonDAO implements PersonRepository {
 
 
     statementAdd.executeUpdate();
+    System.out.println("Person added successfully !!!");
 
     statementAdd.close();
   }
@@ -159,6 +160,7 @@ public class PersonDAO implements PersonRepository {
     statementUpdate.setInt(5, person.getId());
 
     statementUpdate.executeUpdate();
+    System.out.println("Person Successfully updated !!!");
 
     statementUpdate.close();
 
@@ -173,10 +175,11 @@ public class PersonDAO implements PersonRepository {
   @Override
   public void deletePerson(int id) throws SQLException {
 
-    PreparedStatement statementDelete = connection.prepareStatement("DELETE FROM client WHERE id = ? ");
+    PreparedStatement statementDelete = connection.prepareStatement("DELETE IF EXIST FROM client WHERE id = ? ");
     statementDelete.setInt(1, id);
 
     statementDelete.executeUpdate();
+    System.out.println("Person deleted from database !!!");
 
     statementDelete.close();
   }

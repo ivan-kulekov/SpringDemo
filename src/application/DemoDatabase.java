@@ -31,12 +31,12 @@ public class DemoDatabase {
      * Delete person from database.
      */
 
-//    personDAO.deletePerson(1);
+    personDAO.deletePerson(66);
 
     /**
      * Get person information
      */
 
-    System.out.println(personDAO.getPerson(3));
+//    System.out.println(personDAO.getPerson(3));
   }
 }
