@@ -17,6 +17,8 @@ public class Person {
 
   private String middleName;
 
+  private String lastName;
+
   public Person(int id, String firstName, String middleName, String lastName) {
     this.id = id;
     this.firstName = firstName;
@@ -39,8 +41,6 @@ public class Person {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
-
-  private String lastName;
 
   public int getId() {
     return id;
