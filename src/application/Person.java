@@ -11,51 +11,19 @@ import javax.persistence.Id;
 public class Person {
 
 
-  private int id;
+  public final int id;
 
-  private String firstName;
+  public final String firstName;
 
-  private String middleName;
+  public final String middleName;
 
-  private String lastName;
+  public final String lastName;
 
   public Person(int id, String firstName, String middleName, String lastName) {
     this.id = id;
     this.firstName = firstName;
     this.middleName = middleName;
     this.lastName = lastName;
-  }
-
-  public String getMiddleName() {
-    return middleName;
-  }
-
-  public void setMiddleName(String middleName) {
-    this.middleName = middleName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
   }
 
   @Override

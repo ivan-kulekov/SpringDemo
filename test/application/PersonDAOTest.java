@@ -5,11 +5,9 @@ import org.jmock.Mockery;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
 
 import java.sql.SQLException;
 
@@ -19,15 +17,17 @@ import java.sql.SQLException;
  */
 public class PersonDAOTest {
 
-  public PersonDAO personDAO;
-  public Mockery mockery = new JUnit4Mockery();
+  public PersonPersistence personDAO;
+  public Mockery mockery;
 
   @Mock
-  public PersonRepository personRepository = mockery.mock(PersonRepository.class);
+  public PersonRepository personRepository;
 
   @Before
   public void setUp() {
-    personDAO = new PersonDAO();
+    personDAO = new PersonPersistence();
+    mockery = new JUnit4Mockery();
+    personRepository = mockery.mock(PersonRepository.class);
   }
 
   @Test
@@ -35,10 +35,10 @@ public class PersonDAOTest {
 
     mockery.checking(new Expectations() {
       {
-        oneOf(personRepository).addPerson(new Person(5, "Ivancho", "Ivanov", "Stoqnov"));
+        oneOf(personRepository).addPerson(new Person(5, "Ivan", "Ivanov", "Stoqnov"));
 
         oneOf(personRepository).getPerson(5);
-        will(returnValue("Person [id=5, first_name=Ivancho, middle_name=Ivanov, last_name=Stoqnov"));
+        will(returnValue("Person [id=5, first_name=Ivan, middle_name=Ivanov, last_name=Stoqnov"));
       }
     });
   }
@@ -77,9 +77,7 @@ public class PersonDAOTest {
     mockery.checking(new Expectations() {
       {
         oneOf(personRepository).updatePerson(new Person(1, "Stanimir", "Stoichev", "Stoichev"));
-        will(returnValue("Person Successfully updated !!!"));
       }
     });
-    personDAO.updatePerson(new Person(1, "Stanimir", "Stanimir", "Stoichev"));
   }
 }

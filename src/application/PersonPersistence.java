@@ -13,13 +13,13 @@ import java.util.List;
  * @author Ivan Kulekov (ivankulekov10@gmail.com)
  * @since Jun 23 , 2015 13:33
  */
-public class PersonDAO implements PersonRepository {
+public class PersonPersistence implements PersonRepository {
   private Connection connection = null;
 
   /**
    * Make tye constructor and set up the database settings.
    */
-  public PersonDAO() {
+  public PersonPersistence() {
     String dburl = "jdbc:postgresql://localhost/postgres";
     String userName = "postgres";
     String userPassword = "ivan";
@@ -71,14 +71,14 @@ public class PersonDAO implements PersonRepository {
   public void addPerson(Person person) throws SQLException {
 
     PreparedStatement statementAdd = connection.prepareStatement("INSERT INTO client VALUES(?, ?, ?, ?)");
-    statementAdd.setInt(1, person.getId());
-    statementAdd.setString(2, person.getFirstName());
-    statementAdd.setString(3, person.getMiddleName());
-    statementAdd.setString(4, person.getLastName());
+    statementAdd.setInt(1, person.id);
+    statementAdd.setString(2, person.firstName);
+    statementAdd.setString(3, person.middleName);
+    statementAdd.setString(4, person.lastName);
 
 
     statementAdd.executeUpdate();
-      System.out.println("Person added successfully !!!");
+    System.out.println("Person added successfully !!!");
 
     statementAdd.close();
   }
@@ -153,11 +153,11 @@ public class PersonDAO implements PersonRepository {
 
     PreparedStatement statementUpdate = connection.prepareStatement("UPDATE client SET id = ?, first_name = ?, middle_name = ?, last_name = ? WHERE id = ?");
 
-    statementUpdate.setInt(1, person.getId());
-    statementUpdate.setString(2, person.getFirstName());
-    statementUpdate.setString(3, person.getMiddleName());
-    statementUpdate.setString(4, person.getLastName());
-    statementUpdate.setInt(5, person.getId());
+    statementUpdate.setInt(1, person.id);
+    statementUpdate.setString(2, person.firstName);
+    statementUpdate.setString(3, person.middleName);
+    statementUpdate.setString(4, person.lastName);
+    statementUpdate.setInt(5, person.id);
 
     statementUpdate.executeUpdate();
     System.out.println("Person Successfully updated !!!");

@@ -10,7 +10,7 @@ public class DemoDatabase {
 
   public static void main(String[] args) throws SQLException {
 
-    PersonDAO personDAO = new PersonDAO();
+    PersonPersistence personDAO = new PersonPersistence();
 
 /**
  * Insert Person in to a database.
