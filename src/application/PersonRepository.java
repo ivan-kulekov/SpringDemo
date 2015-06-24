@@ -17,7 +17,7 @@ public interface PersonRepository {
 
   void updatePerson(Person person) throws SQLException;
 
-  void deletePgerson(int id) throws SQLException;
+  void deletePerson(int id) throws SQLException;
 
 
 }
