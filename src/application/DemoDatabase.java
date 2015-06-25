@@ -1,5 +1,7 @@
 package application;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 
 /**
@@ -8,14 +10,14 @@ import java.sql.SQLException;
  */
 public class DemoDatabase {
 
-  public static void main(String[] args) throws SQLException {
+  public static void main(String[] args) throws SQLException, IOException {
 
     PersonPersistence personDAO = new PersonPersistence();
 
 /**
  * Insert Person in to a database.
  */
-//    personDAO.addPerson(new Person(2,"Ivan", "Ivanov", "Ivanov"));
+    personDAO.addPerson(new Person(1,"Ivan", "Ivanov", "Ivanov"));
 
     /**
      * Update Person with values.
@@ -31,7 +33,7 @@ public class DemoDatabase {
      * Delete person from database.
      */
 
-    personDAO.deletePerson(66);
+//    personDAO.deletePerson(66);
 
     /**
      * Get person information

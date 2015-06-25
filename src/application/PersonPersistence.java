@@ -1,5 +1,7 @@
 package application;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,6 +17,7 @@ import java.util.List;
  */
 public class PersonPersistence implements PersonRepository {
   private Connection connection = null;
+  private FileInputStream input = null;
 
   /**
    * Make tye constructor and set up the database settings.
@@ -68,9 +71,48 @@ public class PersonPersistence implements PersonRepository {
    */
 
   @Override
-  public void addPerson(Person person) throws SQLException {
+  public void addPerson(Person person) throws SQLException, IOException {
 
+//    String s;
+//    StringBuffer sb = new StringBuffer();
+//    try {
+//      FileReader fr = new FileReader(new File("db_schema.sql"));
+//
+//      BufferedReader br = new BufferedReader(fr);
+//
+//      while ((s = br.readLine()) != null) {
+//        sb.append(s);
+//      }
+//      br.close();
+//
+//
+//      String[] inst = sb.toString().split(";");
+//
+//
+//      Statement st = connection.createStatement();
+//
+//      for (int i = 0; i < inst.length; i++) {
+//
+//        if (!inst[i].trim().equals("")) {
+//          st.executeUpdate(inst[i]);
+//          System.out.println(">>" + inst[i]);
+//        }
+//      }
+//
+//    } catch (Exception e) {
+//      System.out.println("*** Error : " + e.toString());
+//      System.out.println("*** ");
+//      System.out.println("*** Error : ");
+//      e.printStackTrace();
+//      System.out.println("################################################");
+//      System.out.println(sb.toString());
+//    }
+
+
+    clearDataFromTableClient();
     PreparedStatement statementAdd = connection.prepareStatement("INSERT INTO client VALUES(?, ?, ?, ?)");
+
+
     statementAdd.setInt(1, person.id);
     statementAdd.setString(2, person.firstName);
     statementAdd.setString(3, person.middleName);
@@ -78,7 +120,8 @@ public class PersonPersistence implements PersonRepository {
 
 
     statementAdd.executeUpdate();
-    System.out.println("Person added successfully !!!");
+
+    statementAdd.clearParameters();
 
     statementAdd.close();
   }
@@ -160,7 +203,6 @@ public class PersonPersistence implements PersonRepository {
     statementUpdate.setInt(5, person.id);
 
     statementUpdate.executeUpdate();
-    System.out.println("Person Successfully updated !!!");
 
     statementUpdate.close();
 
@@ -179,7 +221,6 @@ public class PersonPersistence implements PersonRepository {
     statementDelete.setInt(1, id);
 
     statementDelete.executeUpdate();
-    System.out.println("Person deleted from database !!!");
 
     statementDelete.close();
   }
@@ -222,7 +263,7 @@ public class PersonPersistence implements PersonRepository {
    * @param resultSet  is the result set.
    * @throws SQLException
    */
-  private static void close(Connection connection, Statement statement, ResultSet resultSet)
+  private void close(Connection connection, Statement statement, ResultSet resultSet)
           throws SQLException {
 
     if (resultSet != null) {
@@ -237,4 +278,13 @@ public class PersonPersistence implements PersonRepository {
       connection.close();
     }
   }
+
+  private void clearDataFromTableClient() throws SQLException {
+
+    PreparedStatement statementClear = connection.prepareStatement("delete from client");
+
+    statementClear.executeUpdate();
+    statementClear.close();
+  }
+
 }

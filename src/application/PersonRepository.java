@@ -1,5 +1,7 @@
 package application;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -9,7 +11,7 @@ import java.util.List;
  */
 public interface PersonRepository {
 
-  void addPerson(Person person) throws SQLException;
+  void addPerson(Person person) throws SQLException, IOException;
 
   Person getPerson(int id) throws SQLException;
 
