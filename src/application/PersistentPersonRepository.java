@@ -1,9 +1,7 @@
 package application;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,51 +13,22 @@ import java.util.List;
  * @author Ivan Kulekov (ivankulekov10@gmail.com)
  * @since Jun 23 , 2015 13:33
  */
-public class PersonPersistence implements PersonRepository {
-  private Connection connection = null;
-  private FileInputStream input = null;
+public class PersistentPersonRepository implements PersonRepository {
+
+
+  private DatabaseConfig database = new DatabaseConfig();
 
   /**
    * Make tye constructor and set up the database settings.
    */
-  public PersonPersistence() {
-    String dburl = "jdbc:postgresql://localhost/postgres";
-    String userName = "postgres";
-    String userPassword = "ivan";
+  public PersistentPersonRepository() throws SQLException {
+
     try {
-
-
-      Class.forName("org.postgresql.Driver");
-
+      database.getConnection();
+    } catch (SQLException exc) {
+      exc.printStackTrace();
     } catch (ClassNotFoundException e) {
-
-      System.out.println("Where is your PostgreSQL JDBC Driver? "
-              + "Include in your library path!");
       e.printStackTrace();
-      return;
-
-    }
-
-    System.out.println("PostgreSQL JDBC Driver Connected!");
-
-
-    try {
-
-      connection = DriverManager.getConnection(
-              dburl, userName, userPassword);
-
-    } catch (SQLException e) {
-
-      System.out.println("Connection Failed! Check output console");
-      e.printStackTrace();
-      return;
-
-    }
-
-    if (connection != null) {
-      System.out.println("You made it, take control your database now!");
-    } else {
-      System.out.println("Failed to make connection!");
     }
   }
 
@@ -71,8 +40,8 @@ public class PersonPersistence implements PersonRepository {
    */
 
   @Override
-  public void addPerson(Person person) throws SQLException, IOException {
-
+  public void addPerson(Person person) throws SQLException, IOException, ClassNotFoundException {
+// //Read database request from sql script file.
 //    String s;
 //    StringBuffer sb = new StringBuffer();
 //    try {
@@ -109,8 +78,7 @@ public class PersonPersistence implements PersonRepository {
 //    }
 
 
-    clearDataFromTableClient();
-    PreparedStatement statementAdd = connection.prepareStatement("INSERT INTO client VALUES(?, ?, ?, ?)");
+    PreparedStatement statementAdd = database.getConnection().prepareStatement("INSERT INTO client VALUES(?, ?, ?, ?)");
 
 
     statementAdd.setInt(1, person.id);
@@ -139,7 +107,7 @@ public class PersonPersistence implements PersonRepository {
     PreparedStatement statementGetPerson = null;
     ResultSet resultSet = null;
     try {
-      statementGetPerson = connection.prepareStatement("SELECT * FROM client WHERE id = ?");
+      statementGetPerson = database.getConnection().prepareStatement("SELECT * FROM client WHERE id = ?");
       statementGetPerson.setInt(1, id);
 
       resultSet = statementGetPerson.executeQuery();
@@ -148,6 +116,8 @@ public class PersonPersistence implements PersonRepository {
         Person tempPerson = convertRowToEmployee(resultSet);
         return tempPerson;
       }
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
     } finally {
       close(statementGetPerson, resultSet);
     }
@@ -169,7 +139,7 @@ public class PersonPersistence implements PersonRepository {
     ResultSet result = null;
 
     try {
-      statementPeople = connection.prepareStatement("select * from client");
+      statementPeople = database.getConnection().prepareStatement("select * from client");
 
 
       result = statementPeople.executeQuery();
@@ -180,9 +150,12 @@ public class PersonPersistence implements PersonRepository {
       }
 
       return listOfPersons;
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
     } finally {
       close(statementPeople, result);
     }
+    return listOfPersons;
   }
 
   /**
@@ -192,9 +165,9 @@ public class PersonPersistence implements PersonRepository {
    * @throws SQLException
    */
   @Override
-  public void updatePerson(Person person) throws SQLException {
+  public void updatePerson(Person person) throws SQLException, ClassNotFoundException {
 
-    PreparedStatement statementUpdate = connection.prepareStatement("UPDATE client SET id = ?, first_name = ?, middle_name = ?, last_name = ? WHERE id = ?");
+    PreparedStatement statementUpdate = database.getConnection().prepareStatement("UPDATE client SET id = ?, first_name = ?, middle_name = ?, last_name = ? WHERE id = ?");
 
     statementUpdate.setInt(1, person.id);
     statementUpdate.setString(2, person.firstName);
@@ -215,15 +188,16 @@ public class PersonPersistence implements PersonRepository {
    * @throws SQLException
    */
   @Override
-  public void deletePerson(int id) throws SQLException {
+  public void deletePerson(int id) throws SQLException, ClassNotFoundException {
 
-    PreparedStatement statementDelete = connection.prepareStatement("DELETE FROM client WHERE id = ? ");
+    PreparedStatement statementDelete = database.getConnection().prepareStatement("DELETE FROM client WHERE id = ? ");
     statementDelete.setInt(1, id);
 
     statementDelete.executeUpdate();
 
     statementDelete.close();
   }
+
 
   /**
    * Make the Person and returned it.
@@ -277,14 +251,6 @@ public class PersonPersistence implements PersonRepository {
     if (connection != null) {
       connection.close();
     }
-  }
-
-  private void clearDataFromTableClient() throws SQLException {
-
-    PreparedStatement statementClear = connection.prepareStatement("delete from client");
-
-    statementClear.executeUpdate();
-    statementClear.close();
   }
 
 }

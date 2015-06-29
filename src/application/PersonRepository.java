@@ -11,15 +11,15 @@ import java.util.List;
  */
 public interface PersonRepository {
 
-  void addPerson(Person person) throws SQLException, IOException;
+  void addPerson(Person person) throws SQLException, IOException, ClassNotFoundException;
 
   Person getPerson(int id) throws SQLException;
 
   List<Person> getPeople() throws SQLException;
 
-  void updatePerson(Person person) throws SQLException;
+  void updatePerson(Person person) throws SQLException, ClassNotFoundException;
 
-  void deletePerson(int id) throws SQLException;
+  void deletePerson(int id) throws SQLException, ClassNotFoundException;
 
 
 }
